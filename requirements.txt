@@ -1,0 +1,4 @@
+pymongo
+impacket
+pcappy
+geoip2
