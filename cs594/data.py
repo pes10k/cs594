@@ -8,6 +8,10 @@ decoder = EthDecoder()
 reader = geoip2.database.Reader('GeoLite2-City.mmdb')
 _geodata = {}
 
+def _sort_key(k):
+    index = k.replace("ddostrace.070804.pcap", "")
+    return int(index) if index else 0
+
 def pcap_data(path, a_filter, callback):
 
     def extract_packet(hdr, data):
@@ -19,6 +23,8 @@ def pcap_data(path, a_filter, callback):
         parsed_packet = {
             "full_ts": full_ts,
             "sec": ts_sec,
+            "minute": ts_sec - (ts_sec % 60),
+            "hour": ts_sec - (ts_sec % 3600),
             "src_ip": src_ip,
             "len": hdr.getlen()
         }
@@ -40,7 +46,8 @@ def pcap_data(path, a_filter, callback):
         callback(parsed_packet)
 
     for root, dirs, files in os.walk(path):
-        for f in files:
+        for f in sorted(files, key=_sort_key):
+            print "parsing " + f
             full_path = os.path.join(path, f)
             p = pcapy.open_offline(full_path)
             p.setfilter(a_filter)
