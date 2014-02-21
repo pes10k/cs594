@@ -25,7 +25,8 @@ def merge_packet(packet):
 
 def write_state():
     if current_state[args.time] != None:
-        json.dump(current_state, output)
+        output.write(json.dumps(current_state))
+        output.write("\n")
     current_state[args.time] = None
     current_state['sources'] = {}
 

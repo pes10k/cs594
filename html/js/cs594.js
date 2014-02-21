@@ -1,11 +1,11 @@
 (function () {
 
-    var bytesToSize;
-
     // Set up simple skelleton for expected "namespaces"
     window.cs594 = {
         data: {},
     };
+
+    var bytesToSize;
 
     bytesToSize = function (bytes, precision) {
         var kilobyte = 1024;
@@ -47,8 +47,9 @@
             shape = data.shape,
             options = {
                 displayMode: 'markers',
-                region: "US",
+                // region: "US",
                 colorAxis: {
+                    colors: ['green', 'red'],
                     minValue: shape.min,
                     maxValue: shape.max
                 }
@@ -58,7 +59,6 @@
             dataTable = new google.visualization.DataTable(data.table),
             currentTime = shape.first - 1,
             toggleStop = false,
-            // Three options, reset if
             updateToggleButton = function () {
                 if (timeSelectorElm.max == timeSelectorElm.value) {
                     toggleButtonElm.innerHTML = "Restart!";
@@ -130,7 +130,6 @@
 
 
         toggleButtonElm.addEventListener("click", function (e) {
-
             if ($toggleButton.hasClass("btn-primary")) {
                 progressView();
             } else if ($toggleButton.hasClass("btn-warning")) {
