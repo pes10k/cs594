@@ -9,7 +9,29 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--output', required=True, help="Path to write Google friendly json to.")
 parser.add_argument('--input', required=True, help="Path to read intermediate json from.")
 parser.add_argument('--name', default="window.map", help="Global property to store resulting table in.")
+parser.add_argument('--group', default='city', help="Sets how to group similarly located data.  Can be be 'city', 'region', 'country', or 'ip'.")
 args = parser.parse_args()
+
+ip_mapping = {}
+def bin_for_record(r):
+    if args.group == "ip":
+        key = r['ip']
+    elif args.group == "city":
+        key = "-".join([r['city'], r['region'], r['country']])
+    elif args.group == "region":
+        key = "-".join([r['region'], r['country']])
+    elif args.group == "country":
+        key = r['country']
+
+    if key in ip_mapping:
+        ip_mapping[key]['len'] += r['len']
+    else:
+        ip_mapping[key] = {
+            'len': r['len'],
+            'lat': r['lat'],
+            'lon': r['lon']
+        }
+
 
 time_bin = None
 min_bin, max_bin = None, None
@@ -48,25 +70,28 @@ out_h.write(boiler_plate)
 
 with open(args.input, 'r') as in_h:
     for a_line in in_h.xreadlines():
+        ip_mapping = {}
         record = json.loads(a_line)
         time = record['time']
-        for source in record['sources']:
-            if not source['lat']:
+
+        for r in record['sources']:
+            if not r['lat']:
                 continue
-            ip = source['ip']
-            lat = source['lat']
-            lon = source['lon']
-            amount = source['len']
+            bin_for_record(r)
+
+        for bin, values in ip_mapping.items():
+            lat = values['lat']
+            lon = values['lon']
+            amount = values['len']
             size = float(amount) / max_value
             params = {
                 "lat": lat,
                 "lon": lon,
                 "bits": amount,
-                "ip": ip,
                 "size": size,
                 "time": time
             }
-            row_string = "{{c: [{{v: {lat}, f: '{ip}'}}, {{v: {lon}}}, {{v: {bits}}}, {{v: {size}}}, {{v: {time}}}]}},\n".format(**params)
+            row_string = "{{c: [{{v: {lat}}}, {{v: {lon}}}, {{v: {bits}}}, {{v: {size}}}, {{v: {time}}}]}},\n".format(**params)
             out_h.write(row_string)
 
 out_h.write(boiler_plate_end)

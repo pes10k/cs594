@@ -101,10 +101,10 @@
 
                 aDate = new Date(currentTime * 1000);
                 timeElm.innerHTML = aDate.toLocaleString();
-                rowIndexes = dataView.getFilteredRows([{column: 3, value: currentTime}]);
+                rowIndexes = dataView.getFilteredRows([{column: 4, value: currentTime}]);
 
                 rowIndexes.forEach(function (val, index) {
-                    totalBits += parseInt(dataView.getValue(val, 2), 10);
+                    totalBits += parseInt(dataView.getValue(val, 3), 10);
                 });
 
                 console.log(rowIndexes.length);
@@ -115,7 +115,7 @@
                 chart.draw(dataView, options);
 
                 if (currentTime < shape.last) {
-                    timerId = setTimeout(progressView, 1000);
+                    timerId = setTimeout(progressView, 500);
                 } else {
                     timerId = null;
                     updateToggleButton();
