@@ -12,6 +12,13 @@ parser.add_argument('--name', default="window.map", help="Global property to sto
 parser.add_argument('--group', default='city', help="Sets how to group similarly located data.  Can be be 'city', 'region', 'country', or 'ip'.")
 args = parser.parse_args()
 
+def sizeof_fmt(num):
+    for x in ['bytes','KB','MB','GB']:
+        if num < 1024.0 and num > -1024.0:
+            return "%3.1f%s" % (num, x)
+        num /= 1024.0
+    return "%3.1f%s" % (num, 'TB')
+
 ip_mapping = {}
 def bin_for_record(r):
     if args.group == "ip":
@@ -31,7 +38,6 @@ def bin_for_record(r):
             'lat': r['lat'],
             'lon': r['lon']
         }
-
 
 time_bin = None
 min_bin, max_bin = None, None
@@ -89,9 +95,10 @@ with open(args.input, 'r') as in_h:
                 "lon": lon,
                 "bits": amount,
                 "size": size,
-                "time": time
+                "time": time,
+                "format": sizeof_fmt(amount)
             }
-            row_string = "{{c: [{{v: {lat}}}, {{v: {lon}}}, {{v: {bits}}}, {{v: {size}}}, {{v: {time}}}]}},\n".format(**params)
+            row_string = "{{c: [{{v: {lat}}}, {{v: {lon}}}, {{v: {bits}, f: '{format}'}}, {{v: {size}}}, {{v: {time}}}]}},\n".format(**params)
             out_h.write(row_string)
 
 out_h.write(boiler_plate_end)
