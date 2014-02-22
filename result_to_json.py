@@ -8,30 +8,21 @@ import json
 parser = argparse.ArgumentParser()
 parser.add_argument('--output', required=True, help="Path to write Google friendly json to.")
 parser.add_argument('--input', required=True, help="Path to read intermediate json from.")
-parser.add_argument('--bin', default="minute", help="The unit of time bin to look for in data")
 parser.add_argument('--name', default="window.map", help="Global property to store resulting table in.")
 args = parser.parse_args()
 
-out_h = open(args.output, 'w')
-boiler_plate = args.name + " = {};\n"
-boiler_plate += args.name + ".type = '" + args.bin + "';\n";
-boiler_plate += args.name + """.table = {
-    cols: [{id: 'lat', label: 'Latitude', type: 'number'},
-           {id: 'long', label: 'Longitude', type: 'number'},
-           {id: 'bits', label: 'Bits', type: 'number'},
-           {id: 'time', label: 'Time Bin', type: 'number'}],
-    rows: ["""
-boiler_plate_end = "]};"
-out_h.write(boiler_plate)
-
+time_bin = None
 min_bin, max_bin = None, None
 min_value, max_value = None, None
 
 with open(args.input, 'r') as in_h:
     for a_line in in_h.xreadlines():
         record = json.loads(a_line)
-        time = record[args.bin]
-        for source, amount in record['sources'].items():
+        if not time_bin:
+           time_bin = record['type']
+        time = record['time']
+        for s in record['sources']:
+            amount = s['len']
             if min_bin is None or time < min_bin:
                 min_bin = time
             if max_bin is None or time > max_bin:
@@ -42,17 +33,37 @@ with open(args.input, 'r') as in_h:
                 max_value = amount
 in_h.close()
 
+out_h = open(args.output, 'w')
+boiler_plate = args.name + " = {};\n"
+boiler_plate += args.name + ".type = '" + time_bin + "';\n";
+boiler_plate += args.name + """.table = {
+    cols: [{id: 'lat', label: 'Latitude', type: 'number'},
+           {id: 'long', label: 'Longitude', type: 'number'},
+           {id: 'bits', label: 'Bits', type: 'number'},
+           {id: 'time', label: 'Time Bin', type: 'number'}],
+    rows: ["""
+boiler_plate_end = "]};"
+out_h.write(boiler_plate)
+
 with open(args.input, 'r') as in_h:
     for a_line in in_h.xreadlines():
         record = json.loads(a_line)
-        time = record[args.bin]
-        for source in record['sources'].items():
+        time = record['time']
+        for source in record['sources']:
             if not source['lat']:
                 continue
             ip = source['ip']
             lat = source['lat']
             lon = source['lon']
-            row_string = """{{c: [{{v: {lat}, f: '{ip}'}}, {{v: {log}}}, {{v: {lat}}}, {{v: {bits}}}, {{v: {time}}}]}},\n""".format(dict(lat=lat, lon=lon, bits=amount, ip=ip, time=time))
+            amount = source['len']
+            params = {
+                "lat": lat,
+                "lon": lon,
+                "bits": amount,
+                "ip": ip,
+                "time": time
+            }
+            row_string = "{{c: [{{v: {lat}, f: '{ip}'}}, {{v: {lon}}}, {{v: {bits}}}, {{v: {time}}}]}},\n".format(**params)
             out_h.write(row_string)
 
 out_h.write(boiler_plate_end)
