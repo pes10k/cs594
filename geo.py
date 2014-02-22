@@ -22,14 +22,19 @@ def merge_packet(packet):
             current_state['sources'][src_ip] = {
                 'len': packet['len'],
                 'lat': packet['geo']['lat'],
-                'lon': packet['geo']['long']
+                'lon': packet['geo']['long'],
+                'ip': src_ip
             }
         else:
             current_state['sources'][src_ip]['len'] += packet['len']
 
 def write_state():
     if current_state[args.time] != None:
-        output.write(json.dumps(current_state))
+        to_write = {}
+        to_write['type'] = args.time
+        to_write['time'] = current_state[args.time]
+        to_write['sources'] = sorted(current_state['sources'].iteritems(), key=lambda x: x['len'], reverse=True)
+        output.write(json.dumps(to_write))
         output.write("\n")
     current_state[args.time] = None
     current_state['sources'] = {}

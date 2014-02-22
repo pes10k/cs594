@@ -104,7 +104,7 @@
                 bandwithElm.innerHTML = bytesToSize(totalBits, 1);
 
                 dataView.setRows(rowIndexes);
-                dataView.setColumns([0, 1, 2, 3]);
+                dataView.setColumns([0, 1, 2]);
                 chart.draw(dataView, options);
 
                 if (currentTime < shape.last) {
