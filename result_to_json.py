@@ -42,7 +42,8 @@ def bin_for_record(r):
 time_bin = None
 min_bin, max_bin = None, None
 min_value, max_value = None, None
-culumative_totals = {}
+running_totals = {}
+prev_total = 0
 
 with open(args.input, 'r') as in_h:
     for a_line in in_h.xreadlines():
@@ -70,7 +71,8 @@ with open(args.input, 'r') as in_h:
                 min_value = amount
             if max_value is None or amount > max_value:
                 max_value = amount
-        culumative_totals[time] = amount_for_time
+        running_totals[time] = amount_for_time, amount_for_time + prev_total
+        prev_total = amount_for_time
 in_h.close()
 
 out_h = open(args.output, 'w')
@@ -115,5 +117,5 @@ with open(args.input, 'r') as in_h:
 
 out_h.write(boiler_plate_end)
 out_h.write("\n")
-out_h.write(args.name + ".totals = " + json.dumps(culumative_totals) + ";\n");
+out_h.write(args.name + ".totals = " + json.dumps(running_totals) + ";\n");
 out_h.write(args.name + ".shape = {first: " + str(min_bin) + ", last: " + str(max_bin) + ", min: " + str(min_value) + ", max: " + str(max_value) + "};\n")
