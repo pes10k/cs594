@@ -31,7 +31,7 @@ def bin_for_record(r):
         key = r['country'] or ''
 
     if key in ip_mapping:
-        ip_mapping[key]['len'] += r['len']
+        ip_mapping[key]['len'] += int(r['len'])
     else:
         ip_mapping[key] = {
             'len': r['len'],
