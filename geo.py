@@ -16,12 +16,16 @@ current_state = {"sources": {}}
 current_state[args.time] = None
 
 def merge_packet(packet):
-    if packet['geo']:
-        lat_long = "{0},{1}".format(packet['geo']['lat'], packet['geo']['long'])
-        if lat_long not in current_state['sources']:
-            current_state['sources'][lat_long] = packet['len']
+    src_ip = packet['src_ip']
+    if packet['geo'] and packet['geo']['lat']:
+        if src_ip not in current_state['sources']:
+            current_state['sources'][src_ip] = {
+                'len': packet['len'],
+                'lat': packet['geo']['lat'],
+                'lon': packet['geo']['long']
+            }
         else:
-            current_state['sources'][lat_long] += packet['len']
+            current_state['sources'][src_ip]['len'] += packet['len']
 
 def write_state():
     if current_state[args.time] != None:

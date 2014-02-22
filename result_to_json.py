@@ -47,16 +47,16 @@ in_h.close()
 with open(args.input, 'r') as in_h:
     for a_line in in_h.xreadlines():
         record = json.loads(a_line)
-        color = "red"
-        ip = ""
         time = record[args.bin]
-        for source, amount in record['sources'].items():
-            if source == "None,None":
+        for source_ip, values in record['sources'].items():
+            if not values['lat']:
                 continue
+            lat = values['lat']
+            lon = values['lon']
             color = amount
             size = float(amount) / max_value
             lat, lon = [float(v) for v in source.split(",")]
-            row_string = "{c: [" + ",".join(["{v: '" + str(f) + "'}" for f in [lat, lon, color, size, ip, time]]) + "]},\n"
+            row_string = "{c: [" + ",".join(["{v: '" + str(f) + "'}" for f in [lat, lon, color, size, source_ip, time]]) + "]},\n"
             out_h.write(row_string)
 
 out_h.write(boiler_plate_end)
