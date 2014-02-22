@@ -43,7 +43,7 @@
             mapElm = document.getElementById('google-sec-map'),
             bandwithElm = document.getElementById("google-map-bandwidth"),
             chart = new google.visualization.GeoChart(mapElm),
-            data = window.cs594.data.secData,
+            data = window.cs594.data.minData,
             shape = data.shape,
             options = {
                 displayMode: 'markers',
@@ -57,7 +57,7 @@
             timerId = null,
             stepSize = (data.type === "sec") ? 1 : 60,
             dataTable = new google.visualization.DataTable(data.table),
-            currentTime = shape.first - 1,
+            currentTime = shape.first - stepSize,
             toggleStop = false,
             updateToggleButton = function () {
                 if (timeSelectorElm.max == timeSelectorElm.value) {
@@ -108,7 +108,7 @@
                 chart.draw(dataView, options);
 
                 if (currentTime < shape.last) {
-                    timerId = setTimeout(progressView, 10);
+                    timerId = setTimeout(progressView, 1000);
                 } else {
                     timerId = null;
                     updateToggleButton();
@@ -128,14 +128,13 @@
             }
         }, false);
 
-
         toggleButtonElm.addEventListener("click", function (e) {
             if ($toggleButton.hasClass("btn-primary")) {
                 progressView();
             } else if ($toggleButton.hasClass("btn-warning")) {
                 toggleStop = true;
             } else {
-                currentTime = shape.first - 1;
+                currentTime = shape.first - stepSize;
                 timeSelectorElm.value = 0;
                 progressView();
             }

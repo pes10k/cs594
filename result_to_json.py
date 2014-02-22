@@ -51,6 +51,8 @@ with open(args.input, 'r') as in_h:
         ip = ""
         time = record[args.bin]
         for source, amount in record['sources'].items():
+            if source == "None,None":
+                continue
             color = amount
             size = float(amount) / max_value
             lat, lon = [float(v) for v in source.split(",")]
