@@ -97,7 +97,7 @@ with open(args.input, 'r') as in_h:
             lat = values['lat']
             lon = values['lon']
             amount = values['len']
-            size = min(float(amount) / max_value, .1)
+            size = max(float(amount) / max_value, .1)
             params = {
                 "lat": lat,
                 "lon": lon,
