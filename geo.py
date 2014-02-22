@@ -30,10 +30,12 @@ def merge_packet(packet):
 
 def write_state():
     if current_state[args.time] != None:
+        s = current_state['sources']
         to_write = {}
         to_write['type'] = args.time
         to_write['time'] = current_state[args.time]
-        to_write['sources'] = sorted(current_state['sources'].items(), key=lambda x, y: y['len'], reverse=True)
+        ips_sorted = sorted(s.keys(), key=lambda k: s[k]['len'], reverse=True)
+        to_write['sources'] = [s[ip] for ip in ips_sorted]
         output.write(json.dumps(to_write))
         output.write("\n")
     current_state[args.time] = None
