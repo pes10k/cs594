@@ -42,10 +42,12 @@ def bin_for_record(r):
 time_bin = None
 min_bin, max_bin = None, None
 min_value, max_value = None, None
+culumative_totals = {}
 
 with open(args.input, 'r') as in_h:
     for a_line in in_h.xreadlines():
         record = json.loads(a_line)
+        amount_for_time = 0
         if not time_bin:
            time_bin = record['type']
         time = record['time']
@@ -59,6 +61,7 @@ with open(args.input, 'r') as in_h:
 
         for bin, values in ip_mapping.items():
             amount = int(values['len'])
+            amount_for_time += amount
             if min_bin is None or time < min_bin:
                 min_bin = time
             if max_bin is None or time > max_bin:
@@ -67,6 +70,7 @@ with open(args.input, 'r') as in_h:
                 min_value = amount
             if max_value is None or amount > max_value:
                 max_value = amount
+        culumative_totals[time] = amount_for_time
 in_h.close()
 
 out_h = open(args.output, 'w')
@@ -111,4 +115,5 @@ with open(args.input, 'r') as in_h:
 
 out_h.write(boiler_plate_end)
 out_h.write("\n")
+out_h.write(args.name + ".totals = " + json.dumps(culumative_totals) + ";\n");
 out_h.write(args.name + ".shape = {first: " + str(min_bin) + ", last: " + str(max_bin) + ", min: " + str(min_value) + ", max: " + str(max_value) + "};\n")
