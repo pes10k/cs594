@@ -72,7 +72,7 @@ with open(args.input, 'r') as in_h:
             if max_value is None or amount > max_value:
                 max_value = amount
         running_totals[time] = amount_for_time, amount_for_time + prev_total
-        prev_total = amount_for_time
+        prev_total += amount_for_time
 in_h.close()
 
 out_h = open(args.output, 'w')
