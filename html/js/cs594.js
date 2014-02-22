@@ -52,6 +52,11 @@
                     colors: ['green', 'red'],
                     minValue: shape.min,
                     maxValue: shape.max
+                },
+                sizeAxis: {
+                    maxSize: 8,
+                    minValue: 0,
+                    maxValue: 1
                 }
             },
             timerId = null,
@@ -91,20 +96,22 @@
                 }
 
                 currentTime += stepSize;
+                console.log(currentTime);
                 timeSelectorElm.value = currentTime;
 
                 aDate = new Date(currentTime * 1000);
                 timeElm.innerHTML = aDate.toLocaleString();
-                rowIndexes = dataView.getFilteredRows([{column: 5, value: currentTime}]);
+                rowIndexes = dataView.getFilteredRows([{column: 3, value: currentTime}]);
 
                 rowIndexes.forEach(function (val, index) {
                     totalBits += parseInt(dataView.getValue(val, 2), 10);
                 });
 
+                console.log(rowIndexes.length);
                 bandwithElm.innerHTML = bytesToSize(totalBits, 1);
 
-                dataView.setRows(rowIndexes);
-                dataView.setColumns([0, 1, 2]);
+                dataView.setRows(rowIndexes.slice(0, 500));
+                dataView.setColumns([0, 1, 2, 3]);
                 chart.draw(dataView, options);
 
                 if (currentTime < shape.last) {

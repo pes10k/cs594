@@ -34,8 +34,8 @@ def pcap_data(path, a_filter, callback):
                 local_geo_info = reader.city(src_ip)
                 local_rec = {
                     'city': local_geo_info.city.name,
-                    'country': local_geo_info.country.name,
-                    'postal': local_geo_info.postal.code,
+                    'country': local_geo_info.country.iso_code,
+                    'region': local_geo_info.subdivisions.most_specific.iso_code,
                     'lat': local_geo_info.location.latitude,
                     'long': local_geo_info.location.longitude
                 }

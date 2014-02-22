@@ -40,6 +40,7 @@ boiler_plate += args.name + """.table = {
     cols: [{id: 'lat', label: 'Latitude', type: 'number'},
            {id: 'long', label: 'Longitude', type: 'number'},
            {id: 'bits', label: 'Bits', type: 'number'},
+           {id: 'size', label: 'Size', type: 'number'},
            {id: 'time', label: 'Time Bin', type: 'number'}],
     rows: ["""
 boiler_plate_end = "]};"
@@ -56,14 +57,16 @@ with open(args.input, 'r') as in_h:
             lat = source['lat']
             lon = source['lon']
             amount = source['len']
+            size = float(amount) / max_value
             params = {
                 "lat": lat,
                 "lon": lon,
                 "bits": amount,
                 "ip": ip,
+                "size": size,
                 "time": time
             }
-            row_string = "{{c: [{{v: {lat}, f: '{ip}'}}, {{v: {lon}}}, {{v: {bits}}}, {{v: {time}}}]}},\n".format(**params)
+            row_string = "{{c: [{{v: {lat}, f: '{ip}'}}, {{v: {lon}}}, {{v: {bits}}}, {{v: {size}}}, {{v: {time}}}]}},\n".format(**params)
             out_h.write(row_string)
 
 out_h.write(boiler_plate_end)
