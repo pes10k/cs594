@@ -57,7 +57,7 @@ with open(args.input, 'r') as in_h:
                 max_bin = time
             if min_value is None or amount < min_value:
                 min_value = amount
-            if max_bin is None or amount > max_value:
+            if max_value is None or amount > max_value:
                 max_value = amount
 in_h.close()
 
