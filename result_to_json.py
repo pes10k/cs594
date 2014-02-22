@@ -19,8 +19,6 @@ boiler_plate += args.name + """.table = {
     cols: [{id: 'lat', label: 'Latitude', type: 'number'},
            {id: 'long', label: 'Longitude', type: 'number'},
            {id: 'bits', label: 'Bits', type: 'number'},
-           {id: 'size', label: 'Size', type: 'number'},
-           {id: 'ip', label: 'IP Address', type: 'string'},
            {id: 'time', label: 'Time Bin', type: 'number'}],
     rows: ["""
 boiler_plate_end = "]};"
@@ -48,15 +46,13 @@ with open(args.input, 'r') as in_h:
     for a_line in in_h.xreadlines():
         record = json.loads(a_line)
         time = record[args.bin]
-        for source_ip, values in record['sources'].items():
-            if not values['lat']:
+        for source in record['sources'].items():
+            if not source['lat']:
                 continue
-            lat = values['lat']
-            lon = values['lon']
-            color = amount
-            size = float(amount) / max_value
-            lat, lon = [float(v) for v in source.split(",")]
-            row_string = "{c: [" + ",".join(["{v: '" + str(f) + "'}" for f in [lat, lon, color, size, source_ip, time]]) + "]},\n"
+            ip = source['ip']
+            lat = source['lat']
+            lon = source['lon']
+            row_string = """{{c: [{{v: {lat}, f: '{ip}'}}, {{v: {log}}}, {{v: {lat}}}, {{v: {bits}}}, {{v: {time}}}]}},\n""".format(dict(lat=lat, lon=lon, bits=amount, ip=ip, time=time))
             out_h.write(row_string)
 
 out_h.write(boiler_plate_end)
