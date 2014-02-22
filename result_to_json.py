@@ -49,8 +49,16 @@ with open(args.input, 'r') as in_h:
         if not time_bin:
            time_bin = record['type']
         time = record['time']
-        for s in record['sources']:
-            amount = s['len']
+
+        ip_mapping = {}
+
+        for r in record['sources']:
+            if not r['lat']:
+                continue
+            bin_for_record(r)
+
+        for bin, values in ip_mapping.items():
+            amount = int(values['len'])
             if min_bin is None or time < min_bin:
                 min_bin = time
             if max_bin is None or time > max_bin:
