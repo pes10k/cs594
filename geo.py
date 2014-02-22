@@ -21,8 +21,9 @@ def merge_packet(packet):
         if src_ip not in current_state['sources']:
             geo = packet['geo']
             current_state['sources'][src_ip] = {
+                'city': geo['city'],
                 'country': geo['country'],
-                'division': geo['division'],
+                'region': geo['region'],
                 'len': packet['len'],
                 'lat': geo['lat'],
                 'lon': geo['long'],
