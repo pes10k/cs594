@@ -24,9 +24,9 @@ def bin_for_record(r):
     if args.group == "ip":
         key = r['ip']
     elif args.group == "city":
-        key = ", ".join([r['city'] or 'unknown city', r['region'] or 'unknown region', r['country'] or 'unknown country'])
+        key = ", ".join([r['city'] or 'Unknown city', r['region'] or 'Unknown region', r['country'] or 'Unknown country'])
     elif args.group == "region":
-        key = ", ".join([r['region'] or 'unknown region', r['country'] or 'unknown country'])
+        key = ", ".join([r['region'] or 'Unknown region', r['country'] or 'Unknown country'])
     elif args.group == "country":
         key = r['country'] or 'Unknown country'
 
