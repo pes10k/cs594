@@ -111,7 +111,7 @@ with open(args.input, 'r') as in_h:
                 "size": size,
                 "time": time,
                 "format": sizeof_fmt(amount),
-                "location": location.encode('ascii', 'ignore')
+                "location": location.encode('ascii', 'ignore').replace("'", '')
             }
             row_string = "{{c: [{{v: {lat}}}, {{v: {lon}}}, {{v: {bits}, f: '{format}'}}, {{v: {size}, f: '{location}'}}, {{v: {time}}}]}},\n".format(**params)
             out_h.write(row_string)
