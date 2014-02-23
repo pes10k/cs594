@@ -24,9 +24,9 @@ def bin_for_record(r):
     if args.group == "ip":
         key = r['ip']
     elif args.group == "city":
-        key = "-".join([r['city'] or '', r['region'] or '', r['country'] or ''])
+        key = ", ".join([r['city'] or '', r['region'] or '', r['country'] or ''])
     elif args.group == "region":
-        key = "-".join([r['region'] or '', r['country'] or ''])
+        key = ", ".join([r['region'] or '', r['country'] or ''])
     elif args.group == "country":
         key = r['country'] or ''
 
@@ -82,7 +82,7 @@ boiler_plate += args.name + """.table = {
     cols: [{id: 'lat', label: 'Latitude', type: 'number'},
            {id: 'long', label: 'Longitude', type: 'number'},
            {id: 'bits', label: 'Bits', type: 'number'},
-           {id: 'size', label: 'Size', type: 'number'},
+           {id: 'size', label: 'Location', type: 'number'},
            {id: 'time', label: 'Time Bin', type: 'number'}],
     rows: ["""
 boiler_plate_end = "]};"
@@ -99,7 +99,7 @@ with open(args.input, 'r') as in_h:
                 continue
             bin_for_record(r)
 
-        for bin, values in ip_mapping.items():
+        for location, values in ip_mapping.items():
             lat = values['lat']
             lon = values['lon']
             amount = values['len']
@@ -110,9 +110,10 @@ with open(args.input, 'r') as in_h:
                 "bits": amount,
                 "size": size,
                 "time": time,
-                "format": sizeof_fmt(amount)
+                "format": sizeof_fmt(amount),
+                "location": location.encode('ascii', 'ignore')
             }
-            row_string = "{{c: [{{v: {lat}}}, {{v: {lon}}}, {{v: {bits}, f: '{format}'}}, {{v: {size}}}, {{v: {time}}}]}},\n".format(**params)
+            row_string = "{{c: [{{v: {lat}}}, {{v: {lon}}}, {{v: {bits}, f: '{format}'}}, {{v: {size}, f: '{location}'}}, {{v: {time}}}]}},\n".format(**params)
             out_h.write(row_string)
 
 out_h.write(boiler_plate_end)
