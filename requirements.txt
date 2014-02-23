@@ -1,4 +1,4 @@
 pymongo
 impacket
-pcappy
+pcapy
 geoip2
