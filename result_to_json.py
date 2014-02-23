@@ -24,11 +24,11 @@ def bin_for_record(r):
     if args.group == "ip":
         key = r['ip']
     elif args.group == "city":
-        key = ", ".join([r['city'] or '', r['region'] or '', r['country'] or ''])
+        key = ", ".join([r['city'] or 'unknown city', r['region'] or 'unknown region', r['country'] or 'unknown country'])
     elif args.group == "region":
-        key = ", ".join([r['region'] or '', r['country'] or ''])
+        key = ", ".join([r['region'] or 'unknown region', r['country'] or 'unknown country'])
     elif args.group == "country":
-        key = r['country'] or ''
+        key = r['country'] or 'Unknown country'
 
     if key in ip_mapping:
         ip_mapping[key]['len'] += int(r['len'])
