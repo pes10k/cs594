@@ -11,12 +11,6 @@ parser.add_argument('--input', default=False, help="path to read combined data F
 parser.add_argument('--output', required=True, help="path to write resulting graph to.")
 args = parser.parse_args()
 
-def formatted_y_labels(datas, num=10):
-  # find the max value
-  max_value = max([sum(row) for row in datas])
-  step = float(max_value)/num
-  return [step * i for i in range(num + 1)]
-
 
 countries_by_contient = {
   "AD": "EU",
@@ -301,7 +295,7 @@ for country in country_indexes:
     stack.add(bar)
     index += 1
 
-y_labels = formatted_y_labels(country_data)
+y_labels = cs594.data.formatted_y_labels(country_data)
 stack.yTickLabelPoints = y_labels
 stack.yTickLabels = [cs594.data.size_format(v) for v in y_labels]
 stack.xTickLabels = x_points
@@ -337,7 +331,7 @@ small_stack.xTickLabelProperties = {
 }
 
 small_y_set = [row for row in country_data[0:27]]
-small_y_labels = formatted_y_labels(small_y_set)
+small_y_labels = cs594.data.formatted_y_labels(small_y_set)
 small_stack.yTickLabelPoints = small_y_labels
 small_stack.yTickLabels = [cs594.data.size_format(v) for v in small_y_labels]
 

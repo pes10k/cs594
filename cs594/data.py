@@ -9,6 +9,12 @@ decoder = EthDecoder()
 reader = geoip2.database.Reader('GeoLite2-City.mmdb')
 _geodata = {}
 
+def formatted_y_labels(datas, num=10):
+  # find the max value
+  max_value = max([sum(row) for row in datas])
+  step = float(max_value)/num
+  return [step * i for i in range(num + 1)]
+
 def _sort_key(k):
     index = k.replace("ddostrace.070804.pcap", "")
     return int(index) if index else 0
