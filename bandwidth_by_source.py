@@ -265,7 +265,8 @@ countries_by_contient = {
 }
 
 country_indexes = ['AF', 'AN', 'AS', 'EU', 'NA', 'SA', 'OC', 'Unknown']
-colors = ['red', 'blue', 'green', 'yellow', 'orange', 'grey', 'black', 'white']
+colors = ['red', 'blue', 'green', 'yellow', 'orange', 'grey', 'black', 'purple']
+country_names = ['Africa', 'Antartica', 'Asia', 'Europe', 'North America', 'South America', 'Oceania', 'Unknown']
 columns = []
 x_points = []
 country_data = []
@@ -287,7 +288,7 @@ index = 0
 for country in country_indexes:
     bar = boomslang.Bar()
     bar.xValues = range(len(x_points))
-    bar.yValues = [data[index] if data[index] else 0 for data in country_data]
+    bar.yValues = [math.log(data[index]) if data[index] else 0 for data in country_data]
     bar.color = colors[index]
     bar.label = country
     stack.add(bar)
