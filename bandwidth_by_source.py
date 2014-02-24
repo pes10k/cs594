@@ -3,7 +3,7 @@ import sys
 import json
 import argparse
 import boomslang
-import math
+import datetime.datetime
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', default=False, help="path to read combined data From. defaults to stdio")
@@ -280,7 +280,7 @@ for a_line in in_data.xreadlines():
             country_data_in_record[continent] = 0
         country_data_in_record[continent] += entry['len']
     country_data.append([country_data_in_record.get(cc, 0) for cc in country_indexes])
-    x_points.append(record['time'])
+    x_points.append(datetime.datetime.fromtimestamp(record['time']).strftime('%H:%M'))
 
 stack = boomslang.StackedBars()
 index = 0
@@ -293,6 +293,7 @@ for country in country_indexes:
     stack.add(bar)
     index += 1
 
+stack.xTickLabels = x_points
 plot = boomslang.Plot()
 plot.add(stack)
 plot.hasLegend()
