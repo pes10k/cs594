@@ -264,9 +264,9 @@ countries_by_contient = {
   'Unknown': 'Unknown'
 }
 
-country_indexes = ['NA', 'AF', 'AN', 'AS', 'EU', 'SA', 'OC', 'Unknown']
-colors = ['red', 'blue', 'green', 'yellow', 'orange', 'grey', 'black', 'purple']
-country_names = ['North America', 'Africa', 'Antartica', 'Asia', 'Europe', 'South America', 'Oceania', 'Unknown']
+country_indexes = ['NA', 'AF', 'AS', 'EU', 'SA', 'OC', 'Unknown']
+colors = ['red', 'blue', 'green', 'yellow', 'orange', 'grey', 'purple']
+country_names = ['North America', 'Africa', 'Asia', 'Europe', 'South America', 'Oceania', 'Unknown']
 columns = []
 x_points = []
 country_data = []
