@@ -3,6 +3,7 @@ import sys
 import json
 import argparse
 import boomslang
+import math
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', default=False, help="path to read combined data From. defaults to stdio")
@@ -264,6 +265,7 @@ countries_by_contient = {
 }
 
 country_indexes = ['AF', 'AN', 'AS', 'EU', 'NA', 'SA', 'OC', 'Unknown']
+colors = ['red', 'blue', 'green', 'yellow', 'orange', 'grey', 'black', 'white']
 columns = []
 x_points = []
 country_data = []
@@ -285,8 +287,8 @@ index = 0
 for country in country_indexes:
     bar = boomslang.Bar()
     bar.xValues = range(len(x_points))
-    bar.yValues = [data[index] for data in country_data]
-    bar.color = "red"
+    bar.yValues = [math.log10(data[index]) for data in country_data]
+    bar.color = colors[index]
     bar.label = country
     stack.add(bar)
     index += 1
