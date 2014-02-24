@@ -3,7 +3,7 @@ import sys
 import json
 import argparse
 import boomslang
-import datetime.datetime
+import datetime
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', default=False, help="path to read combined data From. defaults to stdio")
