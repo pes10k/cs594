@@ -297,9 +297,9 @@ stack.xTickLabels = x_points
 stack.xTickLabelProperties = {
     'rotation': 90
 }
-stack.setDimensions(width=1000, height=700)
+
 plot = boomslang.Plot()
 plot.add(stack)
 plot.hasLegend()
-plot.setDimensions(width=1000, height=700)
+plot.setDimensions(width=1000)
 plot.save("stackedbar.png")
