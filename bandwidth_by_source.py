@@ -294,6 +294,7 @@ for country in country_indexes:
     index += 1
 
 stack.xTickLabels = x_points
+stack.xTickLabelProperties['rotation'] = .9
 plot = boomslang.Plot()
 plot.add(stack)
 plot.hasLegend()
