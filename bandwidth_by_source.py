@@ -290,7 +290,7 @@ for country in country_indexes:
     bar.xValues = range(len(x_points))
     bar.yValues = [data[index] for data in country_data]
     bar.color = colors[index]
-    bar.label = country
+    bar.label = country_names[index]
     stack.add(bar)
     index += 1
 
