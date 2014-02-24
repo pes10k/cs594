@@ -2,3 +2,5 @@ pymongo
 impacket
 pcapy
 geoip2
+boomslang
+matplotlib
