@@ -300,4 +300,5 @@ stack.xTickLabelProperties = {
 plot = boomslang.Plot()
 plot.add(stack)
 plot.hasLegend()
+plot.setDimensions(width=1280, heigh=800)
 plot.save("stackedbar.png")
