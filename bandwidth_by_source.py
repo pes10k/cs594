@@ -280,5 +280,18 @@ for a_line in in_data.xreadlines():
     country_data.append([country_data_in_record.get(cc, 0) for cc in country_indexes])
     x_points.append(record['time'])
 
-import pprint
-pprint.pprint(country_data)
+stack = boomslang.StackedBars()
+index = 0
+for country in country_indexes:
+    bar = boomslang.Bar()
+    bar.xValues = range(len(x_points))
+    bar.yValues = [data[index] for data in country_data]
+    bar.color = "red"
+    bar.label = country
+    stack.add(bar)
+    index += 1
+
+plot = boomslang.Plot()
+plot.add(stack)
+plot.hasLegend()
+plot.save("stackedbar.png")
