@@ -295,7 +295,7 @@ for country in country_indexes:
 
 stack.xTickLabels = x_points
 stack.xTickLabelProperties = {
-    'rotation': .9
+    'rotation': 90
 }
 plot = boomslang.Plot()
 plot.add(stack)
