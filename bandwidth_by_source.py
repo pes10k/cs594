@@ -288,7 +288,8 @@ index = 0
 for country in country_indexes:
     bar = boomslang.Bar()
     bar.xValues = range(len(x_points))
-    bar.yValues = [math.log(data[index]) if data[index] else 0 for data in country_data]
+    bar.yValues = [data[index] for data in country_data]
+    bar.yValues = [math.log(v) if v else 0 for v in bar.yValues]
     bar.color = colors[index]
     bar.label = country
     stack.add(bar)
