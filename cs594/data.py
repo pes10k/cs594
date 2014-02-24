@@ -1,3 +1,4 @@
+from __future__ import division
 import os
 import pcapy
 from impacket.ImpactDecoder import EthDecoder
@@ -52,3 +53,15 @@ def pcap_data(path, a_filter, callback):
             p = pcapy.open_offline(full_path)
             p.setfilter(a_filter)
             p.loop(0, extract_packet)
+
+def size_format(b):
+    if b < 1000:
+        return '%i' % b + 'B'
+    elif 1000 <= b < 1000000:
+        return '%.1f' % float(b/1000) + 'KB'
+    elif 1000000 <= b < 1000000000:
+        return '%.1f' % float(b/1000000) + 'MB'
+    elif 1000000000 <= b < 1000000000000:
+        return '%.1f' % float(b/1000000000) + 'GB'
+    elif 1000000000000 <= b:
+        return '%.1f' % float(b/1000000000000) + 'TB'

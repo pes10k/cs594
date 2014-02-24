@@ -4,11 +4,19 @@ import json
 import argparse
 import boomslang
 import datetime
+import cs594.data
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', default=False, help="path to read combined data From. defaults to stdio")
 parser.add_argument('--output', required=True, help="path to write resulting graph to.")
 args = parser.parse_args()
+
+def formatted_y_labels(datas, num=10):
+  # find the max value
+  max_value = max([sum(row) for row in datas])
+  step = float(max_value)/num
+  return [step * i for i in range(num + 1)]
+
 
 countries_by_contient = {
   "AD": "EU",
@@ -293,6 +301,9 @@ for country in country_indexes:
     stack.add(bar)
     index += 1
 
+y_labels = formatted_y_labels(country_data)
+stack.yTickLabelPoints = y_labels
+stack.yTickLabels = [cs594.data.size_format(v) for v in y_labels]
 stack.xTickLabels = x_points
 stack.xTickLabelProperties = {
     'rotation': 90
@@ -301,5 +312,37 @@ stack.xTickLabelProperties = {
 plot = boomslang.Plot()
 plot.add(stack)
 plot.hasLegend()
-plot.setDimensions(width=1000)
-plot.save("stackedbar.png")
+plot.setDimensions(width=12)
+plot.save("bandwidth_by_continent_full.png")
+
+
+
+
+
+small_stack = boomslang.StackedBars()
+
+index = 0
+for country in country_indexes:
+    bar = boomslang.Bar()
+    bar.xValues = range(27)
+    bar.yValues = [data[index] for data in country_data[0:27]]
+    bar.color = colors[index]
+    bar.label = country_names[index]
+    small_stack.add(bar)
+    index += 1
+
+small_stack.xTickLabels = x_points[0:27]
+small_stack.xTickLabelProperties = {
+    'rotation': 90
+}
+
+small_y_set = [row for row in country_data[0:27]]
+small_y_labels = formatted_y_labels(small_y_set)
+small_stack.yTickLabelPoints = small_y_labels
+small_stack.yTickLabels = [cs594.data.size_format(v) for v in small_y_labels]
+
+small_plot = boomslang.Plot()
+small_plot.add(small_stack)
+small_plot.hasLegend()
+small_plot.setDimensions(width=12)
+small_plot.save("bandwidth_by_continent_early.png")
