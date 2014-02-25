@@ -1,5 +1,6 @@
 import sys
 import json
+import copy
 
 class Stats:
 
@@ -8,6 +9,7 @@ class Stats:
         # convert all items to floats for numerical processing
         self.sequence = [float(item) for item in sequence]
         self.title = title
+        self._sorted_seq = None
 
     def __str__(self):
         return "\n".join([self.title, "==============",
@@ -61,8 +63,7 @@ class Stats:
         if len(self.sequence) < 1:
             return None
         else:
-            self.sequence.sort()
-            return self.sequence[len(self.sequence) // 2]
+            return self.sorted_sequence()[len(self.sequence) // 2]
 
     def stdev(self):
         if len(self.sequence) < 1:
@@ -83,6 +84,11 @@ class Stats:
             value = None
         else:
             element_idx = int(len(self.sequence) * (percentile / 100.0))
-            self.sequence.sort()
-            value = self.sequence[element_idx]
+            value = self.sorted_sequence()[element_idx]
         return value
+
+    def sorted_sequence(self):
+        if not self._sorted_seq:
+            self._sorted_seq = copy.copy(self.sequence)
+            self._sorted_seq.sort()
+        return self._sorted_seq

@@ -10,6 +10,7 @@ import boomslang
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', default=False, help="path to read combined data From. defaults to stdio")
 parser.add_argument('--output', required=True, help="path to write resulting graph to.")
+parser.add_argument('--ip', default=False, help="filter down to a single ip.")
 args = parser.parse_args()
 
 
@@ -33,6 +34,8 @@ for a_line in in_data.xreadlines():
     time = r['time']
     for e in r['sources']:
         ip = e['ip']
+        if args.ip and args.ip != ip:
+            continue
         amount = e['len']
         total += amount
         if ip not in ip_contributions:
@@ -42,8 +45,6 @@ for a_line in in_data.xreadlines():
             ip_contributions[ip]['step'] = step
             ip_contributions[ip]['amounts'].append(amount)
     step += 1
-
-print total
 
 stat_collections = [Stats(ip_contributions[ip]['amounts'], ip) for ip in ip_contributions]
 
