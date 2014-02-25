@@ -1,4 +1,5 @@
 from __future__ import division
+import json
 import os
 import pcapy
 from impacket.ImpactDecoder import EthDecoder
@@ -71,3 +72,14 @@ def size_format(b):
         return '%.1f' % float(b/1000000000) + 'GB'
     elif 1000000000000 <= b:
         return '%.1f' % float(b/1000000000000) + 'TB'
+
+_ip_info_cache = {}
+def ip_info(ip, path):
+    if len(_ip_info_cache) == 0:
+        in_h = open(path, 'r')
+        data = json.load(in_h)
+        for record in data:
+            new_ip = record['traits']['ip_address']
+            _ip_info_cache[new_ip] = record
+        in_h.close()
+    return _ip_info_cache.get(ip, None)
