@@ -1,29 +1,31 @@
 #!/usr/bin/env python
 
-import sys
 import json
 import boomslang
 
-records = []
+max_values = []
 h = open('../computed/stats.txt', 'r')
 for l in h.xreadlines():
     r = json.loads(l)
-    records.append((r['avg'], r['min'], r['max']))
+    max_values.append(int(r['max']))
+
+max_max = max(max_values)
+num_records = len(max_values)
+y_values = [float(sum([1 if x > sub_x else 0 for sub_x in max_values])) / num_records for x in range(max_max)]
+max_y_value = float(max(y_values))
 
 plot = boomslang.Plot()
 line = boomslang.Line()
-sorted_records = sorted(records, key=lambda x: x[0])
 
-line.xValues = range(len(sorted_records))
-line.yValues = [x[0] for x in sorted_records]
-line.yMins = [x[1] for x in sorted_records]
-line.yMaxes = [x[2] for x in sorted_records]
+all_y_labels = ["%.1f" % (y/max_y_value) for y in y_values]
 
-line.label = "Asymmetric Errors"
+line.yLabels = []
+line.xValues = range(max_max)
+line.yValues = y_values
 line.color = "red"
 
 plot.add(line)
-plot.xLabel = "X Label"
-plot.yLabel = "Y Label"
-plot.hasLegend()
-plot.save("errorbars.png")
+plot.title = "CDF of max network use by IP"
+plot.xLabel = "Max observered bandwith in bytes/sec"
+plot.yLabel = "% of observed IPs"
+plot.save("../computed/cdf_max_network_use.png")
