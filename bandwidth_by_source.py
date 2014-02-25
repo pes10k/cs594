@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 import sys
 import json
 import argparse
@@ -305,9 +306,12 @@ stack.xTickLabelProperties = {
 
 plot = boomslang.Plot()
 plot.add(stack)
+plot.title = "Contributed Bandwidth Over Time by Country (grouped by minutes)"
+plot.xLabel = "Time in Minutes"
+plot.yLabel = "Network Usage (in bytes)"
 plot.hasLegend()
 plot.setDimensions(width=12)
-plot.save("bandwidth_by_continent_full.png")
+plot.save(os.path.join(args.output, "bandwidth_by_continent_full.png"))
 
 
 
@@ -336,7 +340,11 @@ small_stack.yTickLabelPoints = small_y_labels
 small_stack.yTickLabels = [cs594.data.size_format(v) for v in small_y_labels]
 
 small_plot = boomslang.Plot()
+
 small_plot.add(small_stack)
+small_plot.title = "Contributed Bandwidth Of Beginning of Attack (grouped by minutes)"
+small_plot.xLabel = "Time in Minutes"
+small_plot.yLabel = "Network Usage (in bytes)"
 small_plot.hasLegend()
 small_plot.setDimensions(width=12)
-small_plot.save("bandwidth_by_continent_early.png")
+small_plot.save(os.path.join(args.output, "bandwidth_by_continent_early.png"))

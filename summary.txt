@@ -1,0 +1,59 @@
+Limit Info
+8430/8683 (0.97086260509) (values below 8k bytes/sec)
+
+ * Total Attackers: 8683
+ * Total Bytes: 24588323204.0
+ * Start time: 2007-08-04 20:49:36
+ * End time: 2007-08-04 21:55:31
+ * Duration: 1:05:55
+
+ * Continents: 7
+ * Countries: 126
+ * Cities: 2559
+ * IPs: 8683
+
+Traffic by continent %
+{'AF': '0.03',
+ 'AS': '0.04',
+ 'EU': '0.17',
+ 'NA': '0.72',
+ 'OC': '0.01',
+ 'SA': '0.04',
+ 'Unknown': '0.00'}
+
+Traffic by country % (top 10)
+ (u'KR', '0.01'),
+ (u'DE', '0.01'),
+ (u'AR', '0.01'),
+ (u'IN', '0.01'),
+ (u'RU', '0.02'),
+ (u'FR', '0.02'),
+ (u'TR', '0.02'),
+ (u'GB', '0.03'),
+ (u'CA', '0.04'),
+ (u'US', '0.66')]
+
+ more in geo stats
+
+
+---------------
+ - bandwidth_by_continent_full.png
+    Shows bandwidth usage over time by country (starting from beginning)
+ - bandwidth_by_continent_small.png
+    Shows bandwidth usage by country, just at start
+ - cdf_max_network_use.png
+    Shows CDF of maximum network usage by IP (shows most nodes seem to be throttled around 8000 bytes per sec))
+ - early_vs_general_contribution.png
+    shows contribtion of starters vs normal nodes
+ - ip_type_count_plot.png
+    Shows how many nodes of each type are in attack
+ - traffic_by_type_plot.png
+    Shows how much traffic is contributed to attack by type
+ - ip_type_country_cluster.png
+    Shows how many nodes of each type are in attach, broken down by country
+ - traffic_country_cluster.png
+    Shows how much traffic is contributed by type broken down by country
+ - ips_by_contribution.png
+    Shows contribution to attacks by ip, showing the power law in effect
+ - ips_by_16_contribution.png
+    Shows contribution to attack by \16 network (traffic is clustered around certain networks)
